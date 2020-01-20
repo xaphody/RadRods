@@ -1,0 +1,139 @@
+import random
+import time
+import pyfiglet
+
+
+def Rolls():
+	# Stat Rolls & Comments
+	print("Okay lets take a look at you")
+	Strength = random.randint(8, 20)
+	StatDic["Str"] = Strength
+	if Strength == 12 or Strength == 13:
+		ModDic["Str"] = 1
+	if Strength == 14 or Strength == 15:
+		ModDic["Str"] = 2
+	if Strength == 16 or Strength == 17:
+		ModDic["Str"] = 3
+	if Strength == 18 or Strength == 19:
+		ModDic["Str"] = 4
+	if Strength == 20:
+		ModDic["Str"] = 5
+	if Strength < 10:
+		print("Opening doors may be troublesome for you")
+	if Strength in range(15, 19):
+		print("Your strength will be rarely matched")
+	if Strength == 20:
+		print("Your Strength is incredible, muscles on muscles")
+	Dexterity = random.randint(8, 20)
+	StatDic["Dex"] = Dexterity
+	if Dexterity == 12 or Dexterity == 13:
+		ModDic["Dex"] = 1
+	if Dexterity == 14 or Dexterity == 15:
+		ModDic["Dex"] = 2
+	if Dexterity == 16 or Dexterity == 17:
+		ModDic["Dex"] = 3
+	if Dexterity == 18 or Dexterity == 19:
+		ModDic["Dex"] = 4
+	if Dexterity == 20:
+		ModDic["Dex"] = 5
+	if Dexterity < 10:
+		print("I wouldn't be joining the circus with your dexterity ")
+	if Dexterity in range(15, 19):
+		print("With your speed and flexibility, You could squeeze yourself into a tiny box")
+	if Dexterity == 20:
+		print("Looks like you could juggle with your feet while balancing on the point of a needle.")
+	Constitution = random.randint(8, 20)
+	StatDic["Con"] = Constitution
+	if Constitution < 10:
+		print("You look like a slight breeze could kill you.")
+	if Constitution in range(15, 19):
+		print("Your health is outstanding.")
+	if Constitution == 20:
+		print("I don't think theres enough poison in the world to bring you down.")
+	Intelligence = random.randint(8, 20)
+	StatDic["Int"] = Intelligence
+	if Intelligence < 10:
+		print("I..will..talk..very..slowly")
+	if Intelligence in range(15, 19):
+		print("You have probably written more books than I have read.")
+	if Intelligence == 20:
+		print("There must be a library inside that head of yours.")
+	Wisdom = random.randint(8, 20)
+	StatDic["Wis"] = Wisdom
+	if Wisdom < 10:
+		print("You don't learn from your successes or failures.")
+	if Wisdom in range(15, 19):
+		print("People will look to you for advice.")
+	if Wisdom == 20:
+		print("You have a profound sense of understanding.")
+	Charisma = random.randint(8, 20)
+	StatDic["Char"] = Charisma
+	if Charisma < 10:
+		print("Keeping your mouth shut and your presence minimal is your only hope.")
+	if Charisma in range(15, 19):
+		print("Such a way with words.")
+	if Charisma == 20:
+		print("You could talk a dragon into some questionable things.")
+	print(StatDic)
+	print("Well now that's sorted, lets see what you can do. Attack this Goblin")
+
+
+# Holds the newly rolled stats for later use.
+StatDic = {"Str": 0,
+           "Dex": 0,
+           "Con": 0,
+           "Int": 0,
+           "Wis": 0,
+           "Char": 0
+           }
+ModDic = {"Str": 0,
+          "Dex": 0,
+          "Con": 0,
+          "Int": 0,
+          "Wis": 0,
+          "Char": 0}
+
+if __name__ == "__main__":
+
+	def MainMenu():
+		ascii_banner = pyfiglet.figlet_format("Menu")
+		print(ascii_banner)
+
+		MenuSelection = input("""
+		New Game(N)
+		Continue(C)
+		Settings(S)
+		""")
+		if MenuSelection == "n" or "N":
+			print("Welcome to the Rad Rods")
+			print("How about we roll some dice to see what kind of person you are.")
+			time.sleep(.5)
+			Rolls()
+
+Goblin = {"HP": 10,
+          "AC": 10,
+          "ATK": 2,
+          "Init": 2
+          }
+
+
+def Combat():
+	print("A goblin walks toward you with a sword in its hand")
+	while Goblin["HP"] > 0:
+		ATKRLL = random.randint(1, 20) + ModDic["Dex"]
+		DMGRLL = random.randint(1, 4) + ModDic["Str"]
+		print("ATK: " + str(ATKRLL))
+		if ATKRLL > 9:
+			print("You hit the goblin with your fists for " + str(DMGRLL) + " Damage")
+			Goblin["HP"] -= DMGRLL
+			print(Goblin["HP"], "Health Remaining")
+		else:
+			print("The Goblin Dodges")
+	else:
+		Goblin["HP"] == 0
+	print("You kill the goblin")
+
+
+MainMenu()
+
+Combat()
