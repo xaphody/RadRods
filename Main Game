@@ -1,84 +1,9 @@
 import random
 import time
 import pyfiglet
+import typing
 
-
-def Rolls():
-	# Stat Rolls & Comments
-	print("Okay lets take a look at you")
-	Strength = random.randint(8, 20)
-	StatDic["Str"] = Strength
-	if Strength == 12 or Strength == 13:
-		ModDic["Str"] = 1
-	if Strength == 14 or Strength == 15:
-		ModDic["Str"] = 2
-	if Strength == 16 or Strength == 17:
-		ModDic["Str"] = 3
-	if Strength == 18 or Strength == 19:
-		ModDic["Str"] = 4
-	if Strength == 20:
-		ModDic["Str"] = 5
-	if Strength < 10:
-		print("Opening doors may be troublesome for you")
-	if Strength in range(15, 19):
-		print("Your strength will be rarely matched")
-	if Strength == 20:
-		print("Your Strength is incredible, muscles on muscles")
-	Dexterity = random.randint(8, 20)
-	StatDic["Dex"] = Dexterity
-	if Dexterity == 12 or Dexterity == 13:
-		ModDic["Dex"] = 1
-	if Dexterity == 14 or Dexterity == 15:
-		ModDic["Dex"] = 2
-	if Dexterity == 16 or Dexterity == 17:
-		ModDic["Dex"] = 3
-	if Dexterity == 18 or Dexterity == 19:
-		ModDic["Dex"] = 4
-	if Dexterity == 20:
-		ModDic["Dex"] = 5
-	if Dexterity < 10:
-		print("I wouldn't be joining the circus with your dexterity ")
-	if Dexterity in range(15, 19):
-		print("With your speed and flexibility, You could squeeze yourself into a tiny box")
-	if Dexterity == 20:
-		print("Looks like you could juggle with your feet while balancing on the point of a needle.")
-	Constitution = random.randint(8, 20)
-	StatDic["Con"] = Constitution
-	if Constitution < 10:
-		print("You look like a slight breeze could kill you.")
-	if Constitution in range(15, 19):
-		print("Your health is outstanding.")
-	if Constitution == 20:
-		print("I don't think theres enough poison in the world to bring you down.")
-	Intelligence = random.randint(8, 20)
-	StatDic["Int"] = Intelligence
-	if Intelligence < 10:
-		print("I..will..talk..very..slowly")
-	if Intelligence in range(15, 19):
-		print("You have probably written more books than I have read.")
-	if Intelligence == 20:
-		print("There must be a library inside that head of yours.")
-	Wisdom = random.randint(8, 20)
-	StatDic["Wis"] = Wisdom
-	if Wisdom < 10:
-		print("You don't learn from your successes or failures.")
-	if Wisdom in range(15, 19):
-		print("People will look to you for advice.")
-	if Wisdom == 20:
-		print("You have a profound sense of understanding.")
-	Charisma = random.randint(8, 20)
-	StatDic["Char"] = Charisma
-	if Charisma < 10:
-		print("Keeping your mouth shut and your presence minimal is your only hope.")
-	if Charisma in range(15, 19):
-		print("Such a way with words.")
-	if Charisma == 20:
-		print("You could talk a dragon into some questionable things.")
-	print(StatDic)
-	print("Well now that's sorted, lets see what you can do. Attack this Goblin")
-
-
-# Holds the newly rolled stats for later use.
+# Dictionaries for Stats.
 StatDic = {"Str": 0,
            "Dex": 0,
            "Con": 0,
@@ -92,48 +17,237 @@ ModDic = {"Str": 0,
           "Int": 0,
           "Wis": 0,
           "Char": 0}
-
-if __name__ == "__main__":
-
-	def MainMenu():
-		ascii_banner = pyfiglet.figlet_format("Menu")
-		print(ascii_banner)
-
-		MenuSelection = input("""
-		New Game(N)
-		Continue(C)
-		Settings(S)
-		""")
-		if MenuSelection == "n" or "N":
-			print("Welcome to the Rad Rods")
-			print("How about we roll some dice to see what kind of person you are.")
-			time.sleep(.5)
-			Rolls()
-
+PlayerCombat = {"HP": 10,
+                "AC": 10,
+                "Init": 4,
+                "DMG": 0,
+                }
 Goblin = {"HP": 10,
           "AC": 10,
           "ATK": 2,
           "Init": 2
           }
+Inventory = {"Gold":0,
+             "Weapon":None}
+
+#   Stat Rolls & Comments
+
+def Rolls():
+	print("Okay lets take a look at you")
+	Strength = random.randint(8, 20)
+	StatDic["Str"] = Strength
+	ModDic["Str"] = StatDic["Str"] // 2 - 5
+	if Strength == 14 or Strength == 15:
+		print("Your strength will be rarely matched")
+	if Strength == 16 or Strength == 17:
+		print("Your strength will be rarely matched")
+	if Strength == 18 or Strength == 19:
+		print("Your strength will be rarely matched")
+	if Strength == 20:
+		print("Your Strength is incredible, muscles on muscles")
+	if Strength < 10:
+		print("Opening doors may be troublesome for you")
+	Dexterity = random.randint(8, 20)
+	StatDic["Dex"] = Dexterity
+	ModDic["Dex"] = StatDic["Dex"] // 2 - 5
+	PlayerCombat["AC"] = ModDic["Dex"] + 10
+	PlayerCombat["Init"] = ModDic["Dex"]
+	if Dexterity == 14 or Dexterity == 15:
+		print("With your speed and flexibility, You could squeeze yourself into a tiny box")
+	if Dexterity == 16 or Dexterity == 17:
+		print("With your speed and flexibility, You could squeeze yourself into a tiny box")
+	if Dexterity == 18 or Dexterity == 19:
+		print("With your speed and flexibility, You could squeeze yourself into a tiny box")
+	if Dexterity == 20:
+		print("Looks like you could juggle with your feet while balancing on the point of a needle.")
+	if Dexterity < 10:
+		print("I wouldn't be joining the circus with your dexterity ")
+	Constitution = random.randint(8, 20)
+	StatDic["Con"] = Constitution
+	ModDic["Con"] = StatDic["Con"] // 2 - 5
+	PlayerCombat["HP"] = ModDic["Con"] + 10
+	if Constitution in range(14, 19):
+		print("Your Health is outstanding")
+	if Constitution == 20:
+		print("I don't think there's enough poison in the world to bring you down.")
+	if Constitution < 10:
+		print("You look like a slight breeze could kill you.")
+	Intelligence = random.randint(8, 20)
+	StatDic["Int"] = Intelligence
+	ModDic["Int"] = StatDic["Int"] // 2 - 5
+	if Intelligence < 10:
+		print("I..will..talk..very..slowly")
+	if Intelligence in range(15, 19):
+		print("You have probably written more books than I have read.")
+	if Intelligence == 20:
+		print("There must be a library inside that head of yours.")
+	Wisdom = random.randint(8, 20)
+	StatDic["Wis"] = Wisdom
+	ModDic["Wis"] = StatDic["Wis"] // 2 - 5
+	if Wisdom < 10:
+		print("You don't learn from your successes or failures.")
+	if Wisdom in range(15, 19):
+		print("People will look to you for advice.")
+	if Wisdom == 20:
+		print("You have a profound sense of understanding.")
+	Charisma = random.randint(8, 20)
+	StatDic["Char"] = Charisma
+	ModDic["Char"] = StatDic["Char"] // 2 - 5
+	if Charisma < 10:
+		print("Keeping your mouth shut and your presence minimal is your only hope.")
+	if Charisma in range(15, 19):
+		print("Such a way with words.")
+	if Charisma == 20:
+		print("You could talk a dragon into some questionable things.")
+	time.sleep(2)
+	print(StatDic)
+	print(ModDic)
+	time.sleep(1)
+	print("Well now that's sorted, lets see what you can do. Attack this Goblin")
+	time.sleep(.5)
+	print("A Goblin walks toward you with a sword")
+	print(PlayerCombat["HP"])
+	print(PlayerCombat["AC"])
+	BattleChoice()
 
 
-def Combat():
-	print("A goblin walks toward you with a sword in its hand")
-	while Goblin["HP"] > 0:
-		ATKRLL = random.randint(1, 20) + ModDic["Dex"]
+def MainMenu():
+	ascii_banner = pyfiglet.figlet_format("Menu")
+	print(ascii_banner)
+	MenuSelection = input("""
+		New Game(N)
+		Continue(C)
+		Settings(S)
+		""")
+	if MenuSelection == "n" or "N":
+		print("Welcome to the Rad Rods")
+		print("How about we roll some dice to see what kind of person you are.")
+		time.sleep(.5)
+		Rolls()
+
+
+def BattleChoice():
+		BattleChoices = input("""
+		---------------------------
+		Attack, Block, Magic, Stats
+		---------------------------
+		""")
+		if BattleChoices == "a":
+			PlayerAttacks()
+		if BattleChoices == "b":
+			PlayerBlocks()
+		if BattleChoices == "c":
+			print(PlayerCombat)
+		if BattleChoices == "d":
+			MagicAttack()
+
+
+def PlayerAttacks():
+	if Inventory["Weapon"] == None:
 		DMGRLL = random.randint(1, 4) + ModDic["Str"]
-		print("ATK: " + str(ATKRLL))
-		if ATKRLL > 9:
-			print("You hit the goblin with your fists for " + str(DMGRLL) + " Damage")
-			Goblin["HP"] -= DMGRLL
-			print(Goblin["HP"], "Health Remaining")
+	else: DMGRLL = random.randint(1, 6) + ModDic["Str"]
+	ATKRLL = random.randint(1, 20) + ModDic["Dex"]
+	if ATKRLL >= Goblin["AC"]:
+		print("You punch the goblin the face for " + str(DMGRLL))
+		Goblin["HP"] -= DMGRLL
+		print("Goblin: " + str(Goblin["HP"]) + " Health Remaining")
+		if Goblin["HP"] > 0:
+			EnemyAttacks()
 		else:
-			print("The Goblin Dodges")
+			Victory()
+	if ATKRLL < Goblin["AC"]:
+		print("You miss")
+		if Goblin["HP"] > 0:
+			EnemyAttacks()
+
+
+def EnemyAttacks():
+	EATKRLL = random.randint(1, 20) + Goblin["ATK"]
+	EDMGRLL = random.randint(1, 6)
+	if EATKRLL >= PlayerCombat["AC"]:
+		print("The Goblin attacks you for " + str(EDMGRLL))
+		PlayerCombat["HP"] -= EDMGRLL
+		print("Player: "+str(PlayerCombat["HP"]) + " Health Remaining")
+		if Goblin["HP"] and PlayerCombat["HP"] > 0:
+			BattleChoice()
+		else:
+			Victory()
 	else:
-		Goblin["HP"] == 0
-	print("You kill the goblin")
+		print("The Goblin misses you")
+		if Goblin["HP"] and PlayerCombat["HP"] > 0:
+			BattleChoice()
+		else:
+			Victory()
+
+
+def PlayerBlocks():
+	PlayerCombat["AC"] += 5
+	print("You ready your defences for the next attack")
+	EnemyAttacks()
+	PlayerCombat["AC"] -= 5
+
+
+def Victory():
+	if Goblin["HP"] <= 0:
+		print("""
+			---------------------
+		      You are Victorious!
+		    ---------------------
+		      """)
+		BattleLoot()
+		Goblin["HP"] == 10
+	if PlayerCombat["HP"] <= 0:
+		print("You have died")
+		MainMenu()
+
+
+def MagicAttack():
+	MATKRLL = random.randint(1, 20) + ModDic["Int"]
+	MDMGRLL = random.randint(1, 6) + ModDic["Int"]
+	if MATKRLL >= Goblin["AC"]:
+		print("You throw a small ball of fire for " + str(MDMGRLL))
+		Goblin["HP"] -= MDMGRLL
+		print("Goblin: " + str(Goblin["HP"]) + " Health Remaining")
+		if Goblin["HP"] > 0:
+			EnemyAttacks()
+		else:
+			Victory()
+	if MATKRLL < Goblin["AC"]:
+		print("The ball of fire fizzles before it reaches the goblin")
+		if Goblin["HP"] > 0:
+			EnemyAttacks()
+		else:
+			Victory()
+
+
+def BattleLoot():
+	GoldGen = random.randint(1,50)
+	print("You receive " + str(GoldGen) + " Gold" )
+	print("You pickup the sword from the fallen Goblin and add it to your inventory")
+	Inventory["Gold"] += GoldGen
+	print(str(Inventory["Gold"]) + " Total Gold"
+	      "")
+	Equip_Item()
+
+def Equip_Item():
+	Equip = input("Would you like to equip the sword?")
+	if Equip == "y"or "yes":
+		Inventory["Weapon"] = "Sword"
+		print("You give the sword a few practice swings")
+		print("Lets see how you fight with sword")
+		CombatTraining()
+	else:
+		print(" ")
+
+def CombatTraining():
+	NewBout = input("Would you like to fight again?")
+	if NewBout == "y":
+		print("Another Goblin rushes toward you")
+		Goblin["HP"] += 10
+		BattleChoice()
+	else:
+		MainMenu()
+
 
 
 MainMenu()
-
-Combat()
