@@ -102,12 +102,17 @@ def Rolls():
 	time.sleep(2)
 	print(StatDic)
 	print(ModDic)
+	ReRoll = input("Reroll?")
+	if ReRoll == "y":
+		Rolls()
+	else:
+		pass
 	time.sleep(1)
 	print("Well now that's sorted, lets see what you can do. Attack this Goblin")
 	time.sleep(.5)
 	print("A Goblin walks toward you with a sword")
-	print(PlayerCombat["HP"])
-	print(PlayerCombat["AC"])
+	print("HP:", PlayerCombat["HP"])
+	print("AC:", PlayerCombat["AC"])
 	BattleChoice()
 
 
@@ -138,6 +143,7 @@ def BattleChoice():
 			PlayerBlocks()
 		if BattleChoices == "c":
 			print(PlayerCombat)
+			BattleChoice()
 		if BattleChoices == "d":
 			MagicAttack()
 
@@ -148,8 +154,11 @@ def PlayerAttacks():
 	else: DMGRLL = random.randint(1, 6) + ModDic["Str"]
 	ATKRLL = random.randint(1, 20) + ModDic["Dex"]
 	if ATKRLL >= Goblin["AC"]:
-		print("You punch the goblin the face for " + str(DMGRLL))
 		Goblin["HP"] -= DMGRLL
+		if Inventory["Weapon"] != "Sword":
+			print("You punch the goblin in the face for " + str(DMGRLL))
+		if Inventory["Weapon"] == "Sword":
+			print("You stab the goblin for " + str(DMGRLL))
 		print("Goblin: " + str(Goblin["HP"]) + " Health Remaining")
 		if Goblin["HP"] > 0:
 			EnemyAttacks()
@@ -195,9 +204,10 @@ def Victory():
 		    ---------------------
 		      """)
 		BattleLoot()
-		Goblin["HP"] == 10
+		Goblin["HP"] = 10
 	if PlayerCombat["HP"] <= 0:
 		print("You have died")
+		Goblin["HP"] = 10
 		MainMenu()
 
 
@@ -230,24 +240,44 @@ def BattleLoot():
 	Equip_Item()
 
 def Equip_Item():
-	Equip = input("Would you like to equip the sword?")
-	if Equip == "y"or "yes":
-		Inventory["Weapon"] = "Sword"
-		print("You give the sword a few practice swings")
-		print("Lets see how you fight with sword")
-		CombatTraining()
+	if Inventory["Weapon"] != "Sword":
+		Equip = input("Would you like to equip the sword?")
+		if Equip == "y":
+			Inventory["Weapon"] = "Sword"
+			print("You give the sword a few practice swings")
+			print("Lets see how you fight with sword")
+			CombatTraining()
+		if Equip == "n":
+			CombatTraining()
 	else:
-		print(" ")
+		CombatTraining()
 
 def CombatTraining():
 	NewBout = input("Would you like to fight again?")
 	if NewBout == "y":
+		print("Kappi places a hand on you and you feel the wounds heal over")
+		PlayerCombat["HP"] = 10 + ModDic["Con"]
 		print("Another Goblin rushes toward you")
-		Goblin["HP"] += 10
+		Goblin["HP"] = 10
 		BattleChoice()
 	else:
-		MainMenu()
+		Assessment()
 
-
+def Assessment():
+	print("Okay, so you can kill a goblin. My advice to you:")
+	if ModDic["Int"] > ModDic["Dex"] and ModDic["Str"]:
+		print("Spells will be of greater use to you than martial combat.")
+	if ModDic["Int"] < ModDic["Dex"] and ModDic["Str"]:
+		print("Weapons and close combat will be better than spell casting.")
+	print("""Well, you can kill a goblin and not die so lets help keep that going.
+	How about some armour?
+	""")
+	if ModDic["Str"] or ModDic["Dex"] in range(0, 3):
+		print("you should be able to wear Light and Medium armour ")
+		if ModDic["Str"] > 3:
+			print(""" and Heavy Armour
+			""")
+	if ModDic["Str"] and ModDic["Dex"] <= 0:
+		print("you should stick to wearing robes")
 
 MainMenu()
